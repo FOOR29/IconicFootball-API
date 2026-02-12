@@ -4,17 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Country extends Model
+class Countries extends Model
 {
     protected $fillable = [
         'name',
         'logo',
     ];
 
-    // logica inversa
     public function players()
     {
-        return $this->hasMany(Player::class);
+        return $this->hasMany(Players::class);
     }
 
     // hidden

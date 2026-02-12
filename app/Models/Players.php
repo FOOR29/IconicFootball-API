@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Player extends Model
+class Players extends Model
 {
     protected $table = 'players';
 
@@ -29,15 +29,14 @@ class Player extends Model
     // relaciones
     public function club()
     {
-        return $this->belongsTo(Club::class);
+        return $this->belongsTo(Clubs::class);
     }
 
     public function country()
     {
-        return $this->belongsTo(Country::class);
+        return $this->belongsTo(Countries::class);
     }
 
-    // ocultar atributos
     protected $hidden = [
         'created_at',
         'updated_at',

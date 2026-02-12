@@ -4,17 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Club extends Model
+class Clubs extends Model
 {
     protected $fillable = [
         'name',
         'logo',
     ];
 
-    // relacion inversa
     public function players()
     {
-        return $this->hasMany(Player::class);
+        return $this->hasMany(Players::class);
     }
 
     // hidden

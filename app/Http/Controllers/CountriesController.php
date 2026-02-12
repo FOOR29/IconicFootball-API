@@ -2,24 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Club;
-use App\Models\Clubs;
+use App\Models\Countries;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class ClubController extends Controller
+class CountriesController extends Controller
 {
-    // GET - List club
+    // GET - List country
     public function index()
     {
-        $clubs = Clubs::all();
+        $countries = Countries::all();
 
         return response()->json([
-            'data' => $clubs
+            'data' => $countries
         ], 200);
     }
 
-    // POST - Create club
+    // POST - Create country
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -34,15 +33,15 @@ class ClubController extends Controller
             ], 422);
         }
 
-        $club = Clubs::create($validator->validated());
+        $country = Countries::create($validator->validated());
 
         return response()->json([
-            'message' => 'Club created successfully',
-            'data' => $club
+            'message' => 'Country created successfully',
+            'data' => $country
         ], 201);
     }
 
-    // PUT - Update club
+    // PUT - Update country
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -57,37 +56,37 @@ class ClubController extends Controller
             ], 422);
         }
 
-        $club = Clubs::find($id);
+        $country = Countries::find($id);
 
-        if (!$club) {
+        if (!$country) {
             return response()->json([
-                'message' => 'Club not found',
+                'message' => 'Country not found',
             ], 404);
         }
 
-        $club->update($validator->validated());
+        $country->update($validator->validated());
 
         return response()->json([
-            'message' => 'Club updated successfully',
-            'data' => $club
+            'message' => 'Country updated successfully',
+            'data' => $country
         ], 200);
     }
 
-    // DELETE - Delete club
+    // DELETE - Delete country
     public function destroy($id)
     {
-        $club = Clubs::find($id);
+        $country = Countries::find($id);
 
-        if (!$club) {
+        if (!$country) {
             return response()->json([
-                'message' => 'Club not found',
+                'message' => 'Country not found',
             ], 404);
         }
 
-        $club->delete();
+        $country->delete();
 
         return response()->json([
-            'message' => 'Club deleted successfully',
+            'message' => 'Country deleted successfully',
         ], 200);
     }
 }

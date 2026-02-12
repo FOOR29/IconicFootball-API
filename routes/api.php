@@ -14,4 +14,3 @@ Route::delete('/players/{id}', [App\Http\Controllers\PlayerController::class, 'd
 Route::put('/players/{id}', [App\Http\Controllers\PlayerController::class, 'update']);
 Route::patch('/players/{id}', [App\Http\Controllers\PlayerController::class, 'updatePartial']);
 
-//

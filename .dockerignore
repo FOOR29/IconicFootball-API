@@ -1,0 +1,50 @@
+# Archivos y directorios a ignorar al construir la imagen Docker
+
+# Dependencias
+/vendor
+/node_modules
+
+# Entorno
+.env
+.env.backup
+.env.production
+
+# IDE
+/.idea
+/.vscode
+*.swp
+*.swo
+*~
+
+# Sistemas operativos
+.DS_Store
+Thumbs.db
+
+# Laravel
+/storage/*.key
+/storage/logs/*
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/testing/*
+/storage/framework/views/*
+/bootstrap/cache/*
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Tests
+/tests
+phpunit.xml
+.phpunit.result.cache
+
+# Docker
+docker-compose.yml
+Dockerfile
+.dockerignore
+
+# Otros
+README.md
+*.md
+.editorconfig

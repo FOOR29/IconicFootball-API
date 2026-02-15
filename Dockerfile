@@ -33,7 +33,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Crear usuario del sistema para ejecutar comandos Composer y Artisan
 RUN useradd -G www-data,root -u $uid -d /home/$user $user
-RUN mkdir -p /home/$user/.composer && \
+RUN mkdir -p /home/$user/.composer &&
     chown -R $user:$user /home/$user
 
 # Establecer directorio de trabajo
@@ -52,8 +52,12 @@ RUN composer install --no-interaction --optimize-autoloader --no-dev
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
-# Exponer puerto 9000 para PHP-FPM
-EXPOSE 9000
+# Copiar script de inicio
+COPY start.sh /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh
 
-# Comando para iniciar PHP-FPM
-CMD ["php-fpm"]
+# Exponer puerto 8000
+EXPOSE 8000
+
+# Comando para iniciar ambos servicios (Nginx + PHP-FPM)
+CMD ["/usr/local/bin/start.sh"]

@@ -71,7 +71,7 @@ The API implements rate limiting based on user categories to ensure fair usage a
 ### Base URL
 
 ```
-http://your-domain.com/api
+https://iconicfootball-api.fly.dev/api/players
 ```
 
 ---
@@ -134,7 +134,7 @@ GET /players/{id}
 **Example**
 
 ```http
-GET /players/1
+GET https://iconicfootball-api.fly.dev/api/players/1
 ```
 
 **Response**
@@ -174,7 +174,7 @@ You can include related data (club and/or country) in your requests using the `i
 **Endpoint**
 
 ```http
-GET /players?include=club,country
+GET https://iconicfootball-api.fly.dev/api/players/1?include=club,country
 ```
 
 **Response**
@@ -341,7 +341,7 @@ GET /players?per_page={number}
 **Example** (Get 11 players)
 
 ```http
-GET /players?per_page=11
+GET https://iconicfootball-api.fly.dev/api/players?per_page=11
 ```
 
 > **Note**: Default pagination is 20 items per page. Maximum recommended: 20.
@@ -357,7 +357,7 @@ GET /players?page={number}
 **Example**
 
 ```http
-GET /players?page=2
+GET https://iconicfootball-api.fly.dev/api/players?page=2
 ```
 
 #### Combined Parameters

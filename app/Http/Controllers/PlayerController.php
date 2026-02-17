@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Players;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Validator;
 
 class PlayerController extends Controller
 {
@@ -31,7 +31,7 @@ class PlayerController extends Controller
             . '_include_' . implode('-', $include);
 
         $players = Cache::remember($cacheKey, 60, function () use ($query, $perPage) {
-            return $query->paginate($perPage);
+            return $query->orderBy('id', 'asc')->paginate($perPage);
         });
 
         if ($players->isEmpty()) {

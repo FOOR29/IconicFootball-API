@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePlayerRequest;
+use App\Http\Requests\UpdatePlayerRequest;
 use App\Models\Players;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -13,9 +15,7 @@ class PlayerController extends Controller
     public function index(Request $request)
     {
         $perPage = $request->input('per_page', 20);
-
         $include = explode(',', $request->input('include', ''));
-
         $query = Players::query();
 
         if (in_array('club', $include)) {
@@ -56,7 +56,6 @@ class PlayerController extends Controller
     public function show(Request $request, $id)
     {
         $include = explode(',', $request->get('include', ''));
-
         $query = Players::query();
 
         if (in_array('club', $include)) {
@@ -86,35 +85,10 @@ class PlayerController extends Controller
         ], 200);
     }
 
-    // POST
-    public function store(Request $request)
+    // POST - Ahora usa StorePlayerRequest ✅
+    public function store(StorePlayerRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'known_as' => 'required|string|max:255',
-            'full_name' => 'required|string|max:255',
-            'img' => 'required|url',
-            'prime_season' => 'required|string|max:255',
-            'prime_position' => 'required|string|max:255',
-            'preferred_foot' => 'required|string|in:left,right,both',
-            'spd' => 'required|integer|min:0|max:100',
-            'sho' => 'required|integer|min:0|max:100',
-            'pas' => 'required|integer|min:0|max:100',
-            'dri' => 'required|integer|min:0|max:100',
-            'def' => 'required|integer|min:0|max:100',
-            'phy' => 'required|integer|min:0|max:100',
-            'prime_rating' => 'required|integer|min:0|max:100',
-            'club_id' => 'required',
-            'country_id' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'message' => 'Validation Error',
-                'errors' => $validator->errors(),
-            ], 422);
-        }
-
-        $player = Players::create($validator->validated());
+        $player = Players::create($request->validated());
         Cache::flush();
 
         return response()->json([
@@ -142,8 +116,8 @@ class PlayerController extends Controller
         ], 200);
     }
 
-    // PUT
-    public function update(Request $request, $id)
+    // PUT - Ahora usa UpdatePlayerRequest ✅
+    public function update(UpdatePlayerRequest $request, $id)
     {
         $player = Players::find($id);
 
@@ -153,32 +127,7 @@ class PlayerController extends Controller
             ], 404);
         }
 
-        $validator = Validator::make($request->all(), [
-            'known_as' => 'required|string|max:255',
-            'full_name' => 'required|string|max:255',
-            'img' => 'required|url',
-            'prime_season' => 'required|string|max:20',
-            'prime_position' => 'required|string|max:255',
-            'preferred_foot' => 'required|string|in:left,right,both',
-            'spd' => 'required|integer|min:0|max:100',
-            'sho' => 'required|integer|min:0|max:100',
-            'pas' => 'required|integer|min:0|max:100',
-            'dri' => 'required|integer|min:0|max:100',
-            'def' => 'required|integer|min:0|max:100',
-            'phy' => 'required|integer|min:0|max:100',
-            'prime_rating' => 'required|integer|min:0|max:100',
-            'club_id' => 'required',
-            'country_id' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'message' => 'Validation Error',
-                'errors' => $validator->errors(),
-            ], 422);
-        }
-
-        $player->update($validator->validated());
+        $player->update($request->validated());
         Cache::flush();
 
         return response()->json([
@@ -187,7 +136,7 @@ class PlayerController extends Controller
         ], 200);
     }
 
-    // PATCH
+    // PATCH - Validación parcial
     public function updatePartial(Request $request, $id)
     {
         $player = Players::find($id);
@@ -212,8 +161,8 @@ class PlayerController extends Controller
             'def' => 'integer|min:0|max:100',
             'phy' => 'integer|min:0|max:100',
             'prime_rating' => 'integer|min:0|max:100',
-            'club_id' => '',
-            'country_id' => '',
+            'club_id' => 'integer|exists:clubs,id',
+            'country_id' => 'integer|exists:countries,id',
         ]);
 
         if ($validator->fails()) {
@@ -223,7 +172,6 @@ class PlayerController extends Controller
             ], 422);
         }
 
-        // only update the fields sended
         $player->update($validator->validated());
         Cache::flush();
 

@@ -41,9 +41,8 @@ class UpdatePlayerRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'known_as.required' => 'El nombre conocido es obligatorio',
-            'full_name.required' => 'El nombre completo es obligatorio',
-            // Personaliza los que quieras
+            'known_as.required' => 'The known as is required',
+            'full_name.required' => 'The full name is required',
         ];
     }
 }

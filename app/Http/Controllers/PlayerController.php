@@ -85,7 +85,7 @@ class PlayerController extends Controller
         ], 200);
     }
 
-    // POST - Ahora usa StorePlayerRequest ✅
+    // POST
     public function store(StorePlayerRequest $request)
     {
         $player = Players::create($request->validated());
@@ -116,7 +116,7 @@ class PlayerController extends Controller
         ], 200);
     }
 
-    // PUT - Ahora usa UpdatePlayerRequest ✅
+    // PUT
     public function update(UpdatePlayerRequest $request, $id)
     {
         $player = Players::find($id);

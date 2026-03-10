@@ -50,7 +50,6 @@ class StorePlayerRequest extends FormRequest
             'img.url' => 'The image must be a valid URL',
             'preferred_foot.in' => 'The preferred foot must be "left", "right", or "both"',
             'spd.max' => 'The speed must be between 0 and 100',
-            // Agrega más mensajes personalizados si quieres
         ];
     }
 }

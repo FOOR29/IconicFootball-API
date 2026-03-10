@@ -44,6 +44,9 @@ COPY . /var/www
 # Copiar configuración de PHP
 COPY docker/php/php.ini /usr/local/etc/php/conf.d/custom.ini
 
+# Copiar configuración de Nginx para producción
+COPY docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+
 # Instalar dependencias de Composer
 RUN composer install --no-interaction --optimize-autoloader --no-dev
 
@@ -55,7 +58,7 @@ RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 COPY start.sh /usr/local/bin/start.sh
 RUN chmod +x /usr/local/bin/start.sh
 
-# Exponer puerto 8000
+# Exponer puerto
 EXPOSE 8000
 
 # Iniciar Nginx + PHP-FPM

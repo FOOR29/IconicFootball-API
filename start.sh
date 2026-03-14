@@ -1,10 +1,16 @@
-#!/bin/sh
+#!/bin/bash
+set -e
 
-# Iniciar PHP-FPM en background
+echo "🚀 Iniciando aplicación..."
+
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+echo "▶ Iniciando PHP-FPM..."
 php-fpm -D
 
-# Copiar configuración de Nginx
-cp /var/www/docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+sleep 2
 
-# Iniciar Nginx en foreground
+echo "▶ Iniciando Nginx..."
 nginx -g 'daemon off;'

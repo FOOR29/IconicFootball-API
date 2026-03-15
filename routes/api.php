@@ -15,8 +15,8 @@ Route::middleware('throttle:public')->group(function () {
 });
 
 Route::middleware('throttle:public')->group(function () {
-    Route::get('/players', [PlayerController::class, 'index']);  // ← Cambiar aquí
-    Route::get('/players/{id}', [PlayerController::class, 'show']);  // ← Cambiar aquí
+    Route::get('/players', [PlayerController::class, 'index']);
+    Route::get('/players/{id}', [PlayerController::class, 'show']);
 });
 
 Route::middleware('isUserAuth', 'throttle:auth')->group(function () {
@@ -28,10 +28,10 @@ Route::middleware('isUserAuth', 'throttle:auth')->group(function () {
 });
 
 Route::middleware(['isUserAuth', 'isAdmin', 'throttle:admin'])->group(function () {
-    Route::post('/players', [PlayerController::class, 'store']);  // ← Cambiar aquí
-    Route::delete('/players/{id}', [PlayerController::class, 'destroy']);  // ← Cambiar aquí
-    Route::put('/players/{id}', [PlayerController::class, 'update']);  // ← Cambiar aquí
-    Route::patch('/players/{id}', [PlayerController::class, 'updatePartial']);  // ← Cambiar aquí
+    Route::post('/players', [PlayerController::class, 'store']);
+    Route::delete('/players/{id}', [PlayerController::class, 'destroy']);
+    Route::put('/players/{id}', [PlayerController::class, 'update']);
+    Route::patch('/players/{id}', [PlayerController::class, 'updatePartial']);
 
     Route::post('/clubs', [ClubController::class, 'store']);
     Route::delete('/clubs/{id}', [ClubController::class, 'destroy']);

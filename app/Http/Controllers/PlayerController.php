@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StorePlayerRequest;
-use App\Http\Requests\UpdatePlayerRequest;
 use App\Models\Players;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -86,9 +84,40 @@ class PlayerController extends Controller
     }
 
     // POST
-    public function store(StorePlayerRequest $request)
+    public function store(Request $request)
     {
-        $player = Players::create($request->validated());
+        $validator = Validator::make($request->all(), [
+            'known_as' => 'required|string|max:255',
+            'full_name' => 'required|string|max:255',
+            'img' => 'required|url',
+            'prime_season' => 'required|string|max:255',
+            'prime_position' => 'required|string|max:255',
+            'preferred_foot' => 'required|string|in:left,right,both',
+            'spd' => 'required|integer|min:0|max:100',
+            'sho' => 'required|integer|min:0|max:100',
+            'pas' => 'required|integer|min:0|max:100',
+            'dri' => 'required|integer|min:0|max:100',
+            'def' => 'required|integer|min:0|max:100',
+            'phy' => 'required|integer|min:0|max:100',
+            'prime_rating' => 'required|integer|min:0|max:100',
+            'club_id' => 'required|integer|exists:clubs,id',
+            'country_id' => 'required|integer|exists:countries,id',
+        ], [
+            'known_as.required' => 'The known as is required',
+            'full_name.required' => 'The full name is required',
+            'img.required' => 'The image is required',
+            'img.url' => 'The image must be a valid URL',
+            'preferred_foot.in' => 'The preferred foot must be "left", "right", or "both"',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation Error',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $player = Players::create($validator->validated());
         Cache::flush();
 
         return response()->json([
@@ -117,7 +146,7 @@ class PlayerController extends Controller
     }
 
     // PUT
-    public function update(UpdatePlayerRequest $request, $id)
+    public function update(Request $request, $id)
     {
         $player = Players::find($id);
 
@@ -127,7 +156,35 @@ class PlayerController extends Controller
             ], 404);
         }
 
-        $player->update($request->validated());
+        $validator = Validator::make($request->all(), [
+            'known_as' => 'required|string|max:255',
+            'full_name' => 'required|string|max:255',
+            'img' => 'required|url',
+            'prime_season' => 'required|string|max:20',
+            'prime_position' => 'required|string|max:255',
+            'preferred_foot' => 'required|string|in:left,right,both',
+            'spd' => 'required|integer|min:0|max:100',
+            'sho' => 'required|integer|min:0|max:100',
+            'pas' => 'required|integer|min:0|max:100',
+            'dri' => 'required|integer|min:0|max:100',
+            'def' => 'required|integer|min:0|max:100',
+            'phy' => 'required|integer|min:0|max:100',
+            'prime_rating' => 'required|integer|min:0|max:100',
+            'club_id' => 'required|integer|exists:clubs,id',
+            'country_id' => 'required|integer|exists:countries,id',
+        ], [
+            'known_as.required' => 'The known as is required',
+            'full_name.required' => 'The full name is required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation Error',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $player->update($validator->validated());
         Cache::flush();
 
         return response()->json([
@@ -136,7 +193,7 @@ class PlayerController extends Controller
         ], 200);
     }
 
-    // PATCH - Validación parcial
+    // PATCH
     public function updatePartial(Request $request, $id)
     {
         $player = Players::find($id);

@@ -3,68 +3,41 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClubController;
 use App\Http\Controllers\CountriesController;
+use App\Http\Controllers\PlayerController;
 use Illuminate\Support\Facades\Route;
 
-/*
- * |--------------------------------------------------------------------------
- * | HEALTH CHECK
- * |--------------------------------------------------------------------------
- */
 Route::get('/health', function () {
     return response()->json(['status' => 'ok'], 200);
 });
 
-/*
- * |--------------------------------------------------------------------------
- * | AUTH
- * |--------------------------------------------------------------------------
- */
 Route::middleware('throttle:public')->group(function () {
-    Route::post('/login', [App\Http\Controllers\AuthController::class, 'login']);
+    Route::post('/login', [AuthController::class, 'login']);
 });
 
-/*
- * |--------------------------------------------------------------------------
- * | PUBLIC ROUTES
- * |--------------------------------------------------------------------------
- */
-
 Route::middleware('throttle:public')->group(function () {
-    Route::get('/players', [App\Http\Controllers\PlayerController::class, 'index']);
-    Route::get('/players/{id}', [App\Http\Controllers\PlayerController::class, 'show']);
+    Route::get('/players', [PlayerController::class, 'index']);  // ← Cambiar aquí
+    Route::get('/players/{id}', [PlayerController::class, 'show']);  // ← Cambiar aquí
 });
-
-/*
- * |--------------------------------------------------------------------------
- * | AUTHENTICATED USERS
- * |--------------------------------------------------------------------------
- */
 
 Route::middleware('isUserAuth', 'throttle:auth')->group(function () {
-    Route::get('/clubs', [App\Http\Controllers\ClubController::class, 'index']);
-    Route::get('/countries', [App\Http\Controllers\CountriesController::class, 'index']);
+    Route::get('/clubs', [ClubController::class, 'index']);
+    Route::get('/countries', [CountriesController::class, 'index']);
 
     Route::get('/me', [AuthController::class, 'getUser']);
     Route::post('/logout', [AuthController::class, 'logout']);
 });
 
-/*
- * |--------------------------------------------------------------------------
- * | ADMIN ROUTES
- * |--------------------------------------------------------------------------
- */
-
 Route::middleware(['isUserAuth', 'isAdmin', 'throttle:admin'])->group(function () {
-    Route::post('/players', [App\Http\Controllers\PlayerController::class, 'store']);
-    Route::delete('/players/{id}', [App\Http\Controllers\PlayerController::class, 'destroy']);
-    Route::put('/players/{id}', [App\Http\Controllers\PlayerController::class, 'update']);
-    Route::patch('/players/{id}', [App\Http\Controllers\PlayerController::class, 'updatePartial']);
+    Route::post('/players', [PlayerController::class, 'store']);  // ← Cambiar aquí
+    Route::delete('/players/{id}', [PlayerController::class, 'destroy']);  // ← Cambiar aquí
+    Route::put('/players/{id}', [PlayerController::class, 'update']);  // ← Cambiar aquí
+    Route::patch('/players/{id}', [PlayerController::class, 'updatePartial']);  // ← Cambiar aquí
 
-    Route::post('/clubs', [App\Http\Controllers\ClubController::class, 'store']);
-    Route::delete('/clubs/{id}', [App\Http\Controllers\ClubController::class, 'destroy']);
-    Route::put('/clubs/{id}', [App\Http\Controllers\ClubController::class, 'update']);
+    Route::post('/clubs', [ClubController::class, 'store']);
+    Route::delete('/clubs/{id}', [ClubController::class, 'destroy']);
+    Route::put('/clubs/{id}', [ClubController::class, 'update']);
 
-    Route::post('/countries', [App\Http\Controllers\CountriesController::class, 'store']);
-    Route::delete('/countries/{id}', [App\Http\Controllers\CountriesController::class, 'destroy']);
-    Route::put('/countries/{id}', [App\Http\Controllers\CountriesController::class, 'update']);
+    Route::post('/countries', [CountriesController::class, 'store']);
+    Route::delete('/countries/{id}', [CountriesController::class, 'destroy']);
+    Route::put('/countries/{id}', [CountriesController::class, 'update']);
 });
